@@ -12,5 +12,6 @@
         public PublisherEntity? PublisherEntity { get; set; }
 
         public ICollection<GenreEntity> Genres { get; set; } = [];
+        public ICollection<BorrowEntity> Borrows { get; set; } = [];
     }
 }

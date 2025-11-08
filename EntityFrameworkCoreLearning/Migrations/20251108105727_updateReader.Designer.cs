@@ -3,6 +3,7 @@ using System;
 using EntityFrameworkCoreLearning.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityFrameworkCoreLearning.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108105727_updateReader")]
+    partial class updateReader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,41 +84,6 @@ namespace EntityFrameworkCoreLearning.Migrations
                         {
                             t.HasCheckConstraint("CK_Book_Year_ValidRange", "year >= 1600 AND year <= EXTRACT(YEAR FROM NOW())");
                         });
-                });
-
-            modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.BorrowEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("BookId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("book_id");
-
-                    b.Property<DateOnly>("BorrowDate")
-                        .HasColumnType("date")
-                        .HasColumnName("borrow_date");
-
-                    b.Property<Guid>("ReaderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("reader_id");
-
-                    b.Property<DateOnly?>("ReturnDate")
-                        .HasColumnType("date")
-                        .HasColumnName("return_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_borrows");
-
-                    b.HasIndex("BookId")
-                        .HasDatabaseName("ix_borrows_book_id");
-
-                    b.HasIndex("ReaderId")
-                        .HasDatabaseName("ix_borrows_reader_id");
-
-                    b.ToTable("borrows", (string)null);
                 });
 
             modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.GenreEntity", b =>
@@ -204,40 +172,9 @@ namespace EntityFrameworkCoreLearning.Migrations
                     b.Navigation("PublisherEntity");
                 });
 
-            modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.BorrowEntity", b =>
-                {
-                    b.HasOne("EntityFrameworkCoreLearning.Data.Models.BookEntity", "Book")
-                        .WithMany("Borrows")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_borrows_books_book_id");
-
-                    b.HasOne("EntityFrameworkCoreLearning.Data.Models.ReaderEntity", "Reader")
-                        .WithMany("Borrows")
-                        .HasForeignKey("ReaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_borrows_readers_reader_id");
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Reader");
-                });
-
-            modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.BookEntity", b =>
-                {
-                    b.Navigation("Borrows");
-                });
-
             modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.PublisherEntity", b =>
                 {
                     b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.ReaderEntity", b =>
-                {
-                    b.Navigation("Borrows");
                 });
 #pragma warning restore 612, 618
         }

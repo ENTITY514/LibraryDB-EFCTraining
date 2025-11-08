@@ -8,6 +8,8 @@ namespace EntityFrameworkCoreLearning.Data
         public DbSet<BookEntity> Books { get; set; }
         public DbSet<GenreEntity> Genres { get; set; }
         public DbSet<PublisherEntity> Publishers { get; set; }
+        public DbSet<ReaderEntity> Readers { get; set; }
+        public DbSet<BorrowEntity> Borrows { get; set; }
 
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options)
             : base(options)
@@ -39,7 +41,7 @@ namespace EntityFrameworkCoreLearning.Data
                 });
 
                 entity.HasOne(book => book.PublisherEntity) 
-                    .WithMany(publisher => publisher.Books) 
+                    .WithMany(publisher => publisher.Books)
                     .HasForeignKey(book => book.PublisherEntityId) 
                     .OnDelete(DeleteBehavior.Restrict);
 
@@ -61,6 +63,21 @@ namespace EntityFrameworkCoreLearning.Data
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<ReaderEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<BorrowEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Reader).WithMany(r => r.Borrows).HasForeignKey(e=>e.ReaderId);
+                entity.HasOne(e => e.Book).WithMany(b => b.Borrows).HasForeignKey(e => e.BookId);
             });
         }
     }

@@ -3,6 +3,7 @@ using System;
 using EntityFrameworkCoreLearning.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityFrameworkCoreLearning.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108122933_addBorrowTable")]
+    partial class addBorrowTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,15 +110,15 @@ namespace EntityFrameworkCoreLearning.Migrations
                         .HasColumnName("return_date");
 
                     b.HasKey("Id")
-                        .HasName("pk_borrows");
+                        .HasName("pk_borrow_entity");
 
                     b.HasIndex("BookId")
-                        .HasDatabaseName("ix_borrows_book_id");
+                        .HasDatabaseName("ix_borrow_entity_book_id");
 
                     b.HasIndex("ReaderId")
-                        .HasDatabaseName("ix_borrows_reader_id");
+                        .HasDatabaseName("ix_borrow_entity_reader_id");
 
-                    b.ToTable("borrows", (string)null);
+                    b.ToTable("borrow_entity", (string)null);
                 });
 
             modelBuilder.Entity("EntityFrameworkCoreLearning.Data.Models.GenreEntity", b =>
@@ -211,14 +214,14 @@ namespace EntityFrameworkCoreLearning.Migrations
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_borrows_books_book_id");
+                        .HasConstraintName("fk_borrow_entity_books_book_id");
 
                     b.HasOne("EntityFrameworkCoreLearning.Data.Models.ReaderEntity", "Reader")
                         .WithMany("Borrows")
                         .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_borrows_readers_reader_id");
+                        .HasConstraintName("fk_borrow_entity_readers_reader_id");
 
                     b.Navigation("Book");
 
