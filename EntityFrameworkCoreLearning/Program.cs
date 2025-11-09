@@ -473,7 +473,6 @@ public class Program
         }
 
         // Топ читаемых книг №15
-
         using (var scope = serviceProvider.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<LibraryDbContext>();
