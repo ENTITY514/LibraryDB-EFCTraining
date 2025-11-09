@@ -16,4 +16,13 @@
 
         public ICollection<ReviewEntity> Reviews { get; set; } = [];
     }
+
+    public class BookDto
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public string PublisherName { get; set; } = string.Empty;
+        public double AvgRating { get; set; }
+        public int BorrowCount { get; set; }
+    }
 }

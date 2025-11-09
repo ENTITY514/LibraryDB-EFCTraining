@@ -688,10 +688,10 @@ public class Program
 
             var books = await context.Books.AsNoTracking()
                 .Where(b => b.Title == "Книга Пяти Колец")
-                .Select(b => new
+                .Select(b => new BookDto
                 {
-                    b.Title,
-                    b.Author,
+                    Title = b.Title,
+                    Author = b.Author,
                     PublisherName = b.PublisherEntity.Name,
                     AvgRating = b.Reviews.Average(r => r.Rating),
                     BorrowCount = b.Borrows.Count()
