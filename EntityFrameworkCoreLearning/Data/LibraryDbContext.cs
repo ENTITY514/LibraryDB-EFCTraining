@@ -10,6 +10,7 @@ namespace EntityFrameworkCoreLearning.Data
         public DbSet<PublisherEntity> Publishers { get; set; }
         public DbSet<ReaderEntity> Readers { get; set; }
         public DbSet<BorrowEntity> Borrows { get; set; }
+        public DbSet<ReviewEntity> Reviews { get; set; }
 
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options)
             : base(options)
@@ -47,6 +48,10 @@ namespace EntityFrameworkCoreLearning.Data
 
                 entity.HasMany(book => book.Genres)
                     .WithMany(genre => genre.Books);
+
+                entity.HasMany(book => book.Reviews)
+                    .WithOne(review => review.Book)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<PublisherEntity>(entity =>
@@ -78,6 +83,21 @@ namespace EntityFrameworkCoreLearning.Data
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.Reader).WithMany(r => r.Borrows).HasForeignKey(e=>e.ReaderId);
                 entity.HasOne(e => e.Book).WithMany(b => b.Borrows).HasForeignKey(e => e.BookId);
+            });
+
+            modelBuilder.Entity<ReviewEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Comment)
+                    .HasMaxLength(1000);
+
+                entity.ToTable("reviews", t =>
+                {
+                    t.HasCheckConstraint(
+                        name: "CK_Review_Rating_Range",
+                        sql: "rating >= 1 AND rating <= 5"
+                    );
+                });
             });
         }
     }

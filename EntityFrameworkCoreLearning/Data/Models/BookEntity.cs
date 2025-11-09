@@ -13,5 +13,7 @@
 
         public ICollection<GenreEntity> Genres { get; set; } = [];
         public ICollection<BorrowEntity> Borrows { get; set; } = [];
+
+        public ICollection<ReviewEntity> Reviews { get; set; } = [];
     }
 }
